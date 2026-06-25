@@ -470,13 +470,13 @@
 
 .lexaro-system-box {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   text-align: left;
   border: 1px solid #eaeaea;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.02);
+  box-shadow: 0 -4px 0 -1px #fafafa, 0 -5px 0 -1px #eaeaea, 0 -8px 0 -2px #fafafa, 0 -9px 0 -2px #eaeaea;
 }
 .lexaro-system-visual-container {
   padding: 40px;
