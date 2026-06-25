@@ -208,13 +208,27 @@ export default function Landing() {
       </section>
 
       {/* ============ THE PROBLEM (LEGACY WORKFLOWS) ============ */}
-      <section className="lexaro-legacy-section">
-        <div className="lexaro-container">
-          <FadeUp>
-            <div className="lexaro-legacy-header">
-              <h2>The problem with legacy<br />outbound workflows</h2>
-              <p>Fragmented sales tools kill productivity. Teams juggle too many platforms — and it slows everything down.</p>
-            </div>
+      <section className="lexaro-legacy-section" style={{ padding: '80px 0' }}>
+        <div className="lexaro-container" style={{ position: 'relative', borderLeft: '1px solid #eaeaea', borderRight: '1px solid #eaeaea' }}>
+          
+          {/* Top Hatched Bar */}
+          <div className="hatched-bg" style={{ position: 'absolute', top: -49, left: -1, right: -1, borderLeft: '1px solid #eaeaea', borderRight: '1px solid #eaeaea', height: '48px' }} />
+
+          {/* Bottom Hatched Bar */}
+          <div className="hatched-bg" style={{ position: 'absolute', bottom: -49, left: -1, right: -1, borderLeft: '1px solid #eaeaea', borderRight: '1px solid #eaeaea', height: '48px' }} />
+
+          {/* Corner Markers */}
+          <div className="corner-tl" style={{ top: -1, left: -1 }} />
+          <div className="corner-tr" style={{ top: -1, right: -1 }} />
+          <div className="corner-bl" style={{ bottom: -1, left: -1 }} />
+          <div className="corner-br" style={{ bottom: -1, right: -1 }} />
+
+          <div style={{ padding: '80px 60px' }}>
+            <FadeUp>
+              <div className="lexaro-legacy-header" style={{ marginBottom: '60px' }}>
+                <h2 style={{ fontSize: '2.8rem' }}>The problem with legacy<br />outbound workflows</h2>
+                <p>Fragmented sales tools kill productivity. Teams juggle too many platforms — and it slows everything down.</p>
+              </div>
           </FadeUp>
 
           <FadeUp delay={0.1}>
@@ -274,19 +288,19 @@ export default function Landing() {
 
                   {/* Pills */}
                   <div className="lexaro-node-pill" style={{ top: '80px', left: '260px', zIndex: 3 }}>
-                    <div style={{ background: '#64748b', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ background: '#10b981', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Check size={12} strokeWidth={3} />
                     </div>
                     LEADS
                   </div>
                   <div className="lexaro-node-pill" style={{ top: '160px', left: '260px', zIndex: 3 }}>
-                    <div style={{ background: '#64748b', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ background: '#10b981', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Check size={12} strokeWidth={3} />
                     </div>
                     EMAILS
                   </div>
                   <div className="lexaro-node-pill" style={{ top: '230px', left: '260px', zIndex: 3 }}>
-                    <div style={{ background: '#64748b', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ background: '#10b981', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Check size={12} strokeWidth={3} />
                     </div>
                     MEETINGS
@@ -316,7 +330,9 @@ export default function Landing() {
                 <p>Let prospects book meetings directly with calendar sync.</p>
               </div>
             </div>
+            </div>
           </FadeUp>
+          </div>
         </div>
       </section>
 
