@@ -14,7 +14,7 @@ import './CrmDashboard.css';
 
 type View =
   | 'dashboard' | 'setup' | 'eventTypes' | 'bookings' | 'availability' | 'people'
-  | 'workflows' | 'routing' | 'insights' | 'apps' | 'payments'
+  | 'workflows' | 'campaigns' | 'routing' | 'insights' | 'apps' | 'payments'
   | 'admin' | 'help';
 
 /* ---------------- mock data ---------------- */
@@ -69,7 +69,7 @@ const OPEN_STATUSES: ContactStatus[] = ['New', 'Follow-up', 'Contacted'];
 const EVENT_TYPES = [
   { title: '15 Min Meeting', dur: '15m', slug: '15min', desc: 'A quick intro or sync call.' },
   { title: '30 Min Meeting', dur: '30m', slug: '30min', desc: 'Standard discovery conversation.' },
-  { title: 'Product Demo', dur: '45m', slug: 'demo', desc: 'Guided walkthrough of CloseCRM.' },
+  { title: 'Product Demo', dur: '45m', slug: 'demo', desc: 'Guided walkthrough of SaleMail.' },
   { title: 'Strategy Session', dur: '60m', slug: 'strategy', desc: 'Deep-dive planning with the team.' },
   { title: 'Group Webinar', dur: '90m', slug: 'webinar', desc: 'Multi-attendee live session.' },
 ];
@@ -189,6 +189,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   ]},
   { label: 'Automate', items: [
     { id: 'workflows', label: 'Workflows', icon: Workflow },
+    { id: 'campaigns', label: 'Campaigns', icon: MessageCircle, badge: 'New', badgeNew: true },
     { id: 'routing', label: 'Routing', icon: Spline },
     { id: 'insights', label: 'Insights', icon: BarChart3 },
   ]},
@@ -206,6 +207,7 @@ const PAGE_META: Record<View, { title: string; sub: string }> = {
   availability: { title: 'Availability', sub: 'Set the hours you’re open for bookings.' },
   people: { title: 'Leads', sub: 'Manage your leads and follow-ups.' },
   workflows: { title: 'Workflows', sub: 'Automate reminders and follow-ups.' },
+  campaigns: { title: 'Campaigns', sub: 'Create and orchestrate outbound email sequences.' },
   routing: { title: 'Routing', sub: 'Send bookers to the right person with forms.' },
   insights: { title: 'Insights', sub: 'Performance trends and sales analytics.' },
   apps: { title: 'Apps', sub: 'Browse the App Store and manage your installed apps.' },
@@ -306,7 +308,7 @@ export default function CrmDashboard() {
     const csv = [head.join(','), ...rows].join('\n');
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
     const a = document.createElement('a');
-    a.href = url; a.download = 'closecrm-leads.csv'; a.click();
+    a.href = url; a.download = 'salemail-leads.csv'; a.click();
     URL.revokeObjectURL(url);
   };
 
@@ -345,9 +347,9 @@ export default function CrmDashboard() {
   const disconnectGoogle = () => { setGEmail(''); localStorage.removeItem(`cc_gmail_${uid}`); };
 
   const embedSnippet =
-    `<!-- CloseCRM booking widget -->\n` +
-    `<script src="https://cdn.closecrm.io/widget.js"\n        data-key="${siteKey}" defer></script>\n` +
-    `<div class="closecrm-booking" data-event="discovery-call"></div>`;
+    `<!-- SaleMail booking widget -->\n` +
+    `<script src="https://cdn.salemail.io/widget.js"\n        data-key="${siteKey}" defer></script>\n` +
+    `<div class="salemail-booking" data-event="discovery-call"></div>`;
 
   const copyEmbed = () => {
     navigator.clipboard?.writeText(embedSnippet).catch(() => {});
@@ -427,9 +429,9 @@ export default function CrmDashboard() {
 
         {/* ============ SIDEBAR ============ */}
         <aside className={`crm-side${sideOpen ? ' open' : ''}`}>
-          <div className="crm-brand">
-            <span className="mark"><span /></span>
-            <span>CloseCRM</span>
+          <div className="crm-brand" style={{ color: '#111' }}>
+            <div style={{ width: '10px', height: '10px', background: '#111', transform: 'rotate(45deg)', borderRadius: '1px' }} />
+            <span>SaleMail</span>
           </div>
 
           <div className="crm-nav-scroll">
@@ -802,7 +804,7 @@ export default function CrmDashboard() {
                       <button className={`crm-switch${i !== 4 ? ' on' : ''}`} aria-label="Active" />
                     </div>
                     <p style={{ fontSize: '0.82rem', color: '#6a6a78', marginTop: 10 }}>{e.desc}</p>
-                    <div className="crm-et-link">closecrm.io/alex/{e.slug}</div>
+                    <div className="crm-et-link">salemail.io/alex/{e.slug}</div>
                     <div className="crm-et-foot">
                       <button className="crm-btn crm-btn-ghost" style={{ flex: 1 }}><Link2 size={14} /> Copy link</button>
                       <button className="crm-btn crm-btn-ghost" style={{ flex: 1 }}>Edit</button>
@@ -960,6 +962,11 @@ export default function CrmDashboard() {
                   </div>
                 ))}
               </div>
+            )}
+
+            {/* ---------- CAMPAIGNS ---------- */}
+            {view === 'campaigns' && (
+              <EmptyState icon={MessageCircle} title="Create your first campaign" body="Design outbound sequences to engage leads and drive pipeline." cta="New campaign" />
             )}
 
             {/* ---------- ROUTING ---------- */}
@@ -1151,7 +1158,7 @@ export default function CrmDashboard() {
               <div className="crm-fade crm-help-grid">
                 {[
                   { icon: BookOpen, h: 'Getting started', p: 'Set up your account and book your first meeting.' },
-                  { icon: FileText, h: 'Documentation', p: 'Browse guides for every CloseCRM feature.' },
+                  { icon: FileText, h: 'Documentation', p: 'Browse guides for every SaleMail feature.' },
                   { icon: MessageCircle, h: 'Contact support', p: 'Reach our team — we reply within a few hours.' },
                   { icon: Keyboard, h: 'Keyboard shortcuts', p: 'Move faster with handy shortcuts.' },
                 ].map(c => {

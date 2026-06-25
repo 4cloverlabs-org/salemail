@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
-  onAuthStateChanged, updateProfile, type User,
+  onAuthStateChanged, updateProfile, type User, GoogleAuthProvider, signInWithPopup
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, requireAuth, requireDb, isFirebaseConfigured } from './firebase';
@@ -12,6 +12,7 @@ interface AuthContextValue {
   configured: boolean;
   signUp: (name: string, email: string, password: string) => Promise<void>;
   logIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   logOut: () => Promise<void>;
 }
 
@@ -47,12 +48,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signInWithEmailAndPassword(requireAuth(), email, password);
   };
 
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const cred = await signInWithPopup(requireAuth(), provider);
+    await setDoc(doc(requireDb(), 'users', cred.user.uid), {
+      name: cred.user.displayName || 'Google User', 
+      email: cred.user.email, 
+      createdAt: Date.now(),
+    }, { merge: true });
+  };
+
   const logOut = async () => {
     await signOut(requireAuth());
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, configured: isFirebaseConfigured, signUp, logIn, logOut }}>
+    <AuthContext.Provider value={{ user, loading, configured: isFirebaseConfigured, signUp, logIn, signInWithGoogle, logOut }}>
       {children}
     </AuthContext.Provider>
   );

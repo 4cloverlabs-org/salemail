@@ -24,9 +24,9 @@ export default function Landing() {
   const heroMockupY = useTransform(scrollY, [0, 1000], [0, -120]);
 
   return (
-    <div className="lexaro-landing" style={{ padding: '40px', background: '#fcfcfc', minHeight: '100vh' }}>
+    <div className="lexaro-landing" style={{ minHeight: '100vh' }}>
       {/* Outer bounding box simulating the Framer canvas */}
-      <div style={{ position: 'relative', background: '#fff', border: '1px solid transparent' }}>
+      <div style={{ position: 'relative', width: '100%' }}>
         <div className="corner-tl" />
         <div className="corner-tr" />
         <div className="corner-bl" />
@@ -36,12 +36,7 @@ export default function Landing() {
         <nav className="lexaro-nav">
           <div className="lexaro-container">
             <div className="lexaro-logo">
-              {/* Exact overlapping geometric logo from image */}
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 4L4 12L12 20L20 12L12 4Z" fill="#555" />
-                <path d="M6 10L14 18L18 14L10 6L6 10Z" fill="#111" />
-                <path d="M18 10L10 18L6 14L14 6L18 10Z" fill="#333" />
-              </svg>
+              <div style={{ width: '10px', height: '10px', background: '#111', transform: 'rotate(45deg)', borderRadius: '1px', marginRight: '2px' }} />
               SaleMail
             </div>
             <div className="lexaro-nav-links">
@@ -56,9 +51,6 @@ export default function Landing() {
             </div>
           </div>
         </nav>
-
-        {/* ============ HATCHED BACKGROUND ============ */}
-        <div className="hatched-bg" />
 
         {/* ============ HERO ============ */}
         <section className="lexaro-hero" id="home">
@@ -182,13 +174,6 @@ export default function Landing() {
         </section>
       </div> {/* End of Framer boundary container */}
 
-      {/* Made in Framer Badge */}
-      <div style={{ position: 'fixed', bottom: 20, right: 20, background: '#fff', borderRadius: 8, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 12px rgba(0,0,0,0.1)', fontSize: 13, fontWeight: 500, zIndex: 1000, color: '#111', fontFamily: '-apple-system, sans-serif' }}>
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 0H14V7H7L14 14H0V0Z" fill="#111" />
-        </svg>
-        Made in Framer
-      </div>
 
       {/* ============ TRUSTED LOGOS ============ */}
       <section className="lexaro-trusted">
@@ -624,11 +609,11 @@ export default function Landing() {
 
       {/* ============ CORE OPERATIONS (Grid) ============ */}
       <section className="lexaro-operations-section" id="operations">
-        <div className="lexaro-container">
+        <div className="lexaro-container lexaro-operations-container">
           <FadeUp>
             <div className="lexaro-operations-header">
               <h2>Core outbound operations</h2>
-              <p>A unified set of tools to generate pipeline and manage campaigns across your company.</p>
+              <p>An integrated suite of intelligent tools designed to accelerate pipeline generation and orchestrate campaigns at scale.</p>
             </div>
           </FadeUp>
 
@@ -636,53 +621,135 @@ export default function Landing() {
             <div className="lexaro-operations-grid">
               {/* Card 1 */}
               <div className="lexaro-operation-card">
-                <div className="lexaro-op-icon"><Sparkles size={20} strokeWidth={1.5} /></div>
-                <h3>Lead Intelligence</h3>
-                <p>Discover and manage verified prospects using advanced search and lead enrichment.</p>
+                <div className="lexaro-op-visual">
+                  <div className="lx-bar-chart">
+                    <div className="lx-bar" style={{ height: '40%' }}></div>
+                    <div className="lx-bar" style={{ height: '60%' }}></div>
+                    <div className="lx-bar" style={{ height: '30%' }}></div>
+                    <div className="lx-bar active" style={{ height: '90%' }}></div>
+                    <div className="lx-bar" style={{ height: '50%' }}></div>
+                    <div className="lx-bar" style={{ height: '70%' }}></div>
+                    <div className="lx-bar" style={{ height: '45%' }}></div>
+                  </div>
+                </div>
+                <div className="lexaro-op-content">
+                  <h3>Prospect Intelligence</h3>
+                  <p>Uncover high-intent accounts and verified decision-makers with advanced data enrichment and precision targeting.</p>
+                </div>
               </div>
+              
               {/* Card 2 */}
               <div className="lexaro-operation-card">
-                <div className="lexaro-op-icon"><Wand2 size={20} strokeWidth={1.5} /></div>
-                <h3>AI Personalization</h3>
-                <p>Generate highly personalized subject lines, icebreakers, and cold emails at scale.</p>
+                <div className="lexaro-op-visual">
+                  <div className="lx-email-window">
+                    <div className="lx-email-line" style={{ width: '40%' }}></div>
+                    <div className="lx-email-line" style={{ width: '80%' }}></div>
+                    <div className="lx-email-line" style={{ width: '60%' }}></div>
+                    <div className="lx-email-line" style={{ width: '90%', marginBottom: '0' }}></div>
+                    <div className="lx-email-btn">SEND EMAIL</div>
+                    <div style={{ position: 'absolute', top: '20%', right: '15%', color: '#fff' }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="lexaro-op-content">
+                  <h3>Generative AI Personalization</h3>
+                  <p>Deploy hyper-personalized outreach at scale, dynamically tailoring subject lines and copy to each individual prospect.</p>
+                </div>
               </div>
+
               {/* Card 3 */}
               <div className="lexaro-operation-card">
-                <div className="lexaro-op-icon"><AlignLeft size={20} strokeWidth={1.5} /></div>
-                <h3>Email Automation</h3>
-                <p>Create automated multi-step email sequences with smart delays and A/B testing.</p>
+                <div className="lexaro-op-visual">
+                  <div className="lx-honeycomb">
+                    <div className="lx-hex" style={{ opacity: 0.2 }}></div>
+                    <div className="lx-hex" style={{ background: '#333', color: '#fff' }}><Sparkles size={16} /></div>
+                    <div className="lx-hex" style={{ opacity: 0.2 }}></div>
+                    <div className="lx-hex" style={{ background: '#555', color: '#fff' }}><Database size={16} /></div>
+                    <div className="lx-hex" style={{ background: '#fff', color: '#111' }}><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" width="16" alt="github" /></div>
+                    <div className="lx-hex" style={{ background: '#555', color: '#fff' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.33-.35-.76-.53-1.09a.09.09 0 0 0-.07-.03c-1.5.26-2.94.71-4.27 1.33a.08.08 0 0 0-.04.03C1.84 10.87.5 16.03.86 21.09a.08.08 0 0 0 .03.06c1.78 1.32 3.5 2.13 5.17 2.67a.08.08 0 0 0 .09-.03c.4-.55.77-1.13 1.09-1.74a.08.08 0 0 0-.04-.11 11.23 11.23 0 0 1-1.62-.77.08.08 0 0 1-.01-.13c.12-.09.23-.19.34-.29a.08.08 0 0 1 .08-.01c3.4 1.55 7.07 1.55 10.45 0a.08.08 0 0 1 .08.01c.11.1.22.2.34.29a.08.08 0 0 1-.01.13 11.23 11.23 0 0 1-1.62.77.08.08 0 0 0-.04.11c.32.61.69 1.19 1.09 1.74a.08.08 0 0 0 .09.03c1.67-.54 3.39-1.35 5.17-2.67a.08.08 0 0 0 .03-.06c.4-5.41-1.12-10.46-4.06-15.68a.08.08 0 0 0-.04-.03zM8.02 15.33c-1.18 0-2.15-1.08-2.15-2.41s.96-2.41 2.15-2.41c1.19 0 2.16 1.08 2.15 2.41 0 1.33-.96 2.41-2.15 2.41zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41s.96-2.41 2.15-2.41c1.19 0 2.16 1.08 2.15 2.41 0 1.33-.96 2.41-2.15 2.41z"/></svg></div>
+                    <div className="lx-hex" style={{ background: '#333', color: '#fff' }}><ListChecks size={16} /></div>
+                    <div className="lx-hex" style={{ background: '#555', color: '#fff' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.99 12c0-6.63-5.37-12-12-12s-12 5.37-12 12c0 5.96 4.35 10.9 10 11.84v-8.38h-3v-3.46h3v-2.64c0-2.96 1.8-4.58 4.45-4.58 1.27 0 2.37.09 2.69.13v3.12l-1.84.01c-1.44 0-1.72.69-1.72 1.69v2.22h3.41l-.44 3.46h-2.97v8.38c5.65-.94 10-5.88 10-11.84z"/></svg></div>
+                    <div className="lx-hex" style={{ opacity: 0.2 }}></div>
+                  </div>
+                </div>
+                <div className="lexaro-op-content">
+                  <h3>Intelligent Automation</h3>
+                  <p>Design sophisticated, multi-step engagement cadences featuring smart conditional delays and multivariate A/B testing.</p>
+                </div>
               </div>
+
               {/* Card 4 */}
               <div className="lexaro-operation-card">
-                <div className="lexaro-op-icon"><Maximize2 size={20} strokeWidth={1.5} /></div>
-                <h3>Meeting Scheduling</h3>
-                <p>Built-in scheduling system allowing prospects to book meetings directly with calendar sync.</p>
+                <div className="lexaro-op-visual">
+                  <div style={{ position: 'relative', width: '240px', height: '140px' }}>
+                    {/* Line chart visualization */}
+                    <svg viewBox="0 0 240 140" style={{ width: '100%', height: '100%' }}>
+                      <path d="M 0 120 Q 30 110, 60 125 T 120 100 T 180 80 T 240 40" fill="none" stroke="#fff" strokeWidth="2" className="lx-chart-path" />
+                      <path d="M 0 130 Q 40 120, 80 135 T 160 110 T 240 90" fill="none" stroke="#555" strokeWidth="1.5" strokeDasharray="4 4" />
+                      {/* Active point marker */}
+                      <circle cx="120" cy="100" r="4" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+                      <rect x="100" y="70" width="40" height="20" rx="10" fill="#fff" />
+                      <text x="120" y="84" fill="#111" fontSize="10" fontWeight="bold" textAnchor="middle">32.8k</text>
+                    </svg>
+                    <div style={{ position: 'absolute', top: 10, left: 10, color: '#fff', fontSize: '12px', fontWeight: 'bold' }}>Sales performance<br/><span style={{ fontSize: '18px' }}>$4,068,400</span></div>
+                    <div style={{ position: 'absolute', top: 10, right: 10, color: '#aaa', fontSize: '10px' }}>Last 30 days</div>
+                  </div>
+                </div>
+                <div className="lexaro-op-content">
+                  <h3>Frictionless Scheduling</h3>
+                  <p>Accelerate the sales cycle with embedded, secure calendar synchronization, empowering prospects to book seamlessly.</p>
+                </div>
               </div>
+
               {/* Card 5 */}
               <div className="lexaro-operation-card">
-                <div className="lexaro-op-icon"><ArrowRightLeft size={20} strokeWidth={1.5} /></div>
-                <h3>Unified Inbox</h3>
-                <p>One centralized inbox for every connected email account with AI reply classification.</p>
+                <div className="lexaro-op-visual">
+                  <div className="lx-badge">
+                    <div style={{ position: 'relative', zIndex: 2, color: '#fff' }}>
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" fill="currentColor"/>
+                        <path d="M8 12L11 15L16 9" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="lexaro-op-content">
+                  <h3>Centralized Command Center</h3>
+                  <p>Consolidate communications across all sender domains into a single inbox, featuring AI-driven intent classification.</p>
+                </div>
               </div>
+
               {/* Card 6 */}
               <div className="lexaro-operation-card">
-                <div className="lexaro-op-icon"><ListChecks size={20} strokeWidth={1.5} /></div>
-                <h3>Pipeline CRM</h3>
-                <p>Track the complete customer journey through customizable outbound pipelines.</p>
+                <div className="lexaro-op-visual">
+                  {/* Calendar / Schedule mockup */}
+                  <div style={{ width: '180px', background: '#222', borderRadius: '8px', padding: '12px', border: '1px solid #333' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', color: '#fff', fontSize: '10px', fontWeight: 'bold' }}>
+                      <span>October</span>
+                      <span style={{ color: '#fff' }}>&lt; &gt;</span>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', textAlign: 'center', fontSize: '8px', color: '#666', marginBottom: '8px' }}>
+                      <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
+                      {Array.from({length: 14}).map((_, i) => (
+                        <div key={i} style={{ aspectRatio: '1/1', background: i === 9 ? '#fff' : '#1a1a1a', borderRadius: '4px', border: '1px solid #333', animation: i === 9 ? 'lxCalendarBlink 6s infinite' : 'none' }}></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="lexaro-op-content">
+                  <h3>Purpose-Built Sales CRM</h3>
+                  <p>Gain full visibility into the customer journey with real-time analytics and fully customizable revenue pipelines.</p>
+                </div>
               </div>
+
             </div>
           </FadeUp>
 
-          {/* Hatched Separator from image */}
-          <FadeUp delay={0.2}>
-            <div style={{ marginTop: '120px', position: 'relative' }}>
-               <div style={{ height: '32px', borderTop: '1px solid #eaeaea', borderBottom: '1px solid #eaeaea', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 4px, #f0f0f0 4px, #f0f0f0 5px)' }} />
-               <div style={{ position: 'absolute', top: -5, left: -2, width: 8, height: 8, borderTop: '2px solid #111', borderLeft: '2px solid #111' }} />
-               <div style={{ position: 'absolute', top: -5, right: -2, width: 8, height: 8, borderTop: '2px solid #111', borderRight: '2px solid #111' }} />
-               <div style={{ position: 'absolute', bottom: -5, left: -2, width: 8, height: 8, borderBottom: '2px solid #111', borderLeft: '2px solid #111' }} />
-               <div style={{ position: 'absolute', bottom: -5, right: -2, width: 8, height: 8, borderBottom: '2px solid #111', borderRight: '2px solid #111' }} />
-            </div>
-          </FadeUp>
         </div>
       </section>
 
@@ -1027,23 +1094,22 @@ export default function Landing() {
       </section>
 
       {/* ============ FOOTER ============ */}
-      <section className="lexaro-section bg-surface" style={{ paddingBottom: 0 }}>
-        <div className="lexaro-container lexaro-footer">
+      <section className="lexaro-footer-section">
+        <div className="lexaro-container">
           <FadeUp>
-            <h2 style={{ letterSpacing: '-0.05em' }}>Automate how your team sells</h2>
+            <div className="lexaro-footer-cta">
+              <h2>Automate how your team sells</h2>
+              <a href="#" className="lexaro-footer-cta-btn">Get Started</a>
+            </div>
           </FadeUp>
           
           <div className="lexaro-footer-grid">
             <div className="lexaro-footer-col">
-              <div className="lexaro-logo" style={{ marginBottom: '20px' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4.5 12L12 4.5L19.5 12" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M4.5 12H19.5" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M12 19.5L4.5 12" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className="lexaro-footer-logo">
+                <div style={{ width: '10px', height: '10px', background: '#fff', transform: 'rotate(45deg)', borderRadius: '1px', marginRight: '2px' }} />
                 SaleMail
               </div>
-              <p style={{ color: '#a3a3a3', fontSize: '0.95rem', lineHeight: 1.6, maxWidth: '240px' }}>
+              <p style={{ color: '#888', fontSize: '0.95rem', lineHeight: 1.6, maxWidth: '240px' }}>
                 The AI-powered outbound platform for modern teams to scale their revenue.
               </p>
             </div>
@@ -1078,9 +1144,9 @@ export default function Landing() {
           <div className="lexaro-footer-bottom">
             <div>© 2026 SaleMail Inc. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '20px' }}>
-              <Twitter size={20} color="#a3a3a3" style={{ cursor: 'pointer' }} />
-              <Github size={20} color="#a3a3a3" style={{ cursor: 'pointer' }} />
-              <Linkedin size={20} color="#a3a3a3" style={{ cursor: 'pointer' }} />
+              <Twitter size={20} color="#888" style={{ cursor: 'pointer' }} />
+              <Github size={20} color="#888" style={{ cursor: 'pointer' }} />
+              <Linkedin size={20} color="#888" style={{ cursor: 'pointer' }} />
             </div>
           </div>
         </div>

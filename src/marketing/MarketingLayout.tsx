@@ -37,7 +37,7 @@ export default function MarketingLayout() {
             <span className="cc-logo-mark">
               <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#fff', display: 'block' }} />
             </span>
-            <span>CloseCRM</span>
+            <span>SaleMail</span>
           </Link>
           <div className="cc-nav-links">
             <NavLink to="/about">About</NavLink>
@@ -92,7 +92,7 @@ export default function MarketingLayout() {
           </div>
 
           <div className="cc-foot-bottom">
-            <span className="copy">CloseCRM © {new Date().getFullYear()}</span>
+            <span className="copy">SaleMail © {new Date().getFullYear()}</span>
             <div className="cc-socials">
               <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={16} /></a>
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><Twitter size={16} /></a>
