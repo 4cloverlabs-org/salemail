@@ -459,7 +459,7 @@ export default function Landing() {
 
               <div className="lexaro-system-visual-container">
                 <div className="lexaro-system-visual" style={{ height: '420px' }}>
-                  <div className="lexaro-correction-card" style={{ position: 'absolute', top: '30px', left: '40px', right: '40px', bottom: '30px', background: '#fff', border: '1px solid #eaeaea', borderRadius: '4px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 2 }}>
+                  <div className="lexaro-correction-card" style={{ position: 'absolute', top: '30px', left: '40px', right: '40px', bottom: '30px', background: '#fff', border: '1px solid #eaeaea', borderRadius: '4px', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 2 }}>
                     
                     {/* Text Preview */}
                     <div style={{ padding: '16px 24px', fontSize: '0.95rem', color: '#111' }}>Draft Preview</div>
@@ -722,7 +722,7 @@ export default function Landing() {
                   </div>
                   
                   {/* Receiver */}
-                  <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', background: '#fff', border: '1px solid #eaeaea', borderRadius: '4px', padding: '16px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', zIndex: 2, boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}>
+                  <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', background: '#fff', border: '1px solid #eaeaea', borderRadius: '4px', padding: '16px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', zIndex: 2 }}>
                     <div style={{ width: 32, height: 32, background: '#111', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 4L4 12L12 20L20 12L12 4Z" fill="#555" />
