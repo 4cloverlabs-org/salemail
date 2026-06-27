@@ -323,50 +323,61 @@ class CampaignEngine {
     localStorage.setItem('sm_threads', JSON.stringify(this.threads));
   }
 
-  public async sendRealEmail(recipient: string, subject: string, htmlBody: string) {
-    if (!recipient) return;
+  public async sendRealEmail(recipient: string, subject: string, htmlBody: string): Promise<{ success: boolean; message: string }> {
+    if (!recipient) return { success: false, message: 'No recipient specified.' };
     const s = this.getSettings();
     try {
-      // 1. Direct Gmail API Shoot (Appears in user's Sent folder!)
       const gmailToken = s.gmailAccessToken || localStorage.getItem('sm_gmail_token');
       const senderEmail = s.gmailUserEmail || localStorage.getItem('sm_gmail_email') || 'me';
-      if ((s.directMailEngine === 'gmail' || !s.directMailEngine) && gmailToken) {
-        const utf8Subject = `=?utf-8?B?${btoa(unescape(encodeURIComponent(subject || 'SaleMail Outreach')))}?=`;
-        const rfc2822Message = [
-          `To: ${recipient}`,
-          `From: SaleMail Campaign <${senderEmail !== 'me' ? senderEmail : ''}>`,
-          `Subject: ${utf8Subject}`,
-          `MIME-Version: 1.0`,
-          `Content-Type: text/html; charset=utf-8`,
-          ``,
-          htmlBody
-        ].join('\r\n');
-
-        const base64UrlEmail = btoa(unescape(encodeURIComponent(rfc2822Message)))
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_')
-          .replace(/=+$/, '');
-
-        const gmailRes = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${gmailToken}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ raw: base64UrlEmail })
-        });
-        const gmailData = await gmailRes.json();
-        if (gmailRes.ok) {
-          console.log(`[SaleMail Gmail API] Sent directly via user mailbox! Message ID:`, gmailData.id);
-          return;
-        } else {
-          console.warn(`[SaleMail Gmail API] Error response:`, gmailData);
-        }
+      
+      if (!gmailToken) {
+        const msg = "⚠️ Gmail Mailbox not connected! Go to Settings -> click '🔗 1-Click Connect Gmail'.";
+        console.warn(msg);
+        alert(msg);
+        return { success: false, message: msg };
       }
 
-      console.log(`[SaleMail Direct Engine] Prepared direct mail shoot for ${recipient}. Connect Gmail account for live API transmission.`);
-    } catch (err) {
+      const utf8Subject = `=?utf-8?B?${btoa(unescape(encodeURIComponent(subject || 'SaleMail Outreach')))}?=`;
+      const rfc2822Message = [
+        `To: ${recipient}`,
+        `From: SaleMail Campaign <${senderEmail !== 'me' ? senderEmail : ''}>`,
+        `Subject: ${utf8Subject}`,
+        `MIME-Version: 1.0`,
+        `Content-Type: text/html; charset=utf-8`,
+        ``,
+        htmlBody
+      ].join('\r\n');
+
+      const base64UrlEmail = btoa(unescape(encodeURIComponent(rfc2822Message)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+
+      const gmailRes = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${gmailToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ raw: base64UrlEmail })
+      });
+      const gmailData = await gmailRes.json();
+      
+      if (gmailRes.ok) {
+        console.log(`[SaleMail Gmail API] Sent directly via user mailbox! Message ID:`, gmailData.id);
+        return { success: true, message: `Dispatched live via Gmail API to ${recipient}!` };
+      } else {
+        const errMsg = gmailData?.error?.message || 'Unknown Gmail API error.';
+        const fullMsg = `❌ Gmail API Error: ${errMsg}. Check Google Cloud Console to ensure 'Gmail API' is enabled and scope 'gmail.send' is authorized.`;
+        console.warn(fullMsg, gmailData);
+        alert(fullMsg);
+        return { success: false, message: fullMsg };
+      }
+    } catch (err: any) {
       console.warn("Real email dispatch warning:", err);
+      const netMsg = `❌ Network error sending email: ${err?.message || err}`;
+      alert(netMsg);
+      return { success: false, message: netMsg };
     }
   }
 

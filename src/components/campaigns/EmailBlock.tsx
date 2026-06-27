@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Eye, Trash2, CheckCircle2, Link as LinkIcon, Bold, Italic } from 'lucide-react';
+import { Send, Eye, Trash2, CheckCircle2, AlertCircle, Link as LinkIcon, Bold, Italic } from 'lucide-react';
 import { type CampaignStep, type EmailStatus, campaignEngine } from './campaignEngine';
 
 interface EmailBlockProps {
@@ -37,20 +37,21 @@ export const EmailBlock: React.FC<EmailBlockProps> = ({
   onDelete,
 }) => {
   const [isPreview, setIsPreview] = useState(false);
-  const [testSent, setTestSent] = useState(false);
+  const [testStatus, setTestStatus] = useState<{ active: boolean; error: boolean; text: string }>({ active: false, error: false, text: '' });
 
   const insertVariable = (varName: string) => {
     const newBody = (step.body || '') + ` ${varName} `;
     onUpdate({ ...step, body: newBody });
   };
 
-  const handleSendTest = () => {
+  const handleSendTest = async () => {
     const target = recipientEmail || 'kushaljoshi2786@gmail.com';
     const subj = step.subject || 'Test Email from SaleMail';
     const html = renderPreview(step.body || '');
-    campaignEngine.sendRealEmail(target, subj, html);
-    setTestSent(true);
-    setTimeout(() => setTestSent(false), 4500);
+    setTestStatus({ active: true, error: false, text: 'Sending via Gmail API...' });
+    const res = await campaignEngine.sendRealEmail(target, subj, html);
+    setTestStatus({ active: true, error: !res.success, text: res.message });
+    setTimeout(() => setTestStatus({ active: false, error: false, text: '' }), 6000);
   };
 
   const deriveName = (email: string) => {
@@ -243,9 +244,9 @@ export const EmailBlock: React.FC<EmailBlockProps> = ({
           className="camp-btn camp-btn-ghost"
           style={{ fontSize: '0.8rem', padding: '6px 14px' }}
         >
-          {testSent ? (
-            <span style={{ color: '#16a34a', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <CheckCircle2 size={14} /> Dispatched live to {recipientEmail || 'kushaljoshi2786@gmail.com'}! (Check primary/spam)
+          {testStatus.active ? (
+            <span style={{ color: testStatus.error ? '#dc2626' : '#16a34a', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
+              {testStatus.error ? <AlertCircle size={14} /> : <CheckCircle2 size={14} />} {testStatus.text}
             </span>
           ) : (
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
