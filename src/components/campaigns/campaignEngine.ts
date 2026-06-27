@@ -121,7 +121,9 @@ export interface CampaignSettingsData {
   linkTracking: boolean;
   autoUnsubscribe: boolean;
   signature: string;
-  directMailEngine?: 'web3forms' | 'emailjs' | 'formsubmit';
+  directMailEngine?: 'gmail' | 'web3forms' | 'emailjs' | 'formsubmit';
+  gmailAccessToken?: string;
+  gmailUserEmail?: string;
   web3FormsKey?: string;
   emailJsServiceId?: string;
   emailJsTemplateId?: string;
@@ -140,7 +142,9 @@ let settings: CampaignSettingsData = {
   linkTracking: true,
   autoUnsubscribe: true,
   signature: '<p>Best regards,<br><strong>SaleMail Team</strong></p>',
-  directMailEngine: 'web3forms',
+  directMailEngine: 'gmail',
+  gmailAccessToken: '',
+  gmailUserEmail: '',
   web3FormsKey: '',
   emailJsServiceId: '',
   emailJsTemplateId: '',
@@ -334,7 +338,44 @@ class CampaignEngine {
     try {
       const cleanMessage = htmlBody.replace(/<[^>]*>?/gm, '\n').trim() || 'Please check the HTML content.';
       
-      // 1. Direct Web3Forms Shoot (No activation link required)
+      // 1. Direct Gmail API Shoot (Appears in user's Sent folder!)
+      const gmailToken = s.gmailAccessToken || localStorage.getItem('sm_gmail_token');
+      const senderEmail = s.gmailUserEmail || localStorage.getItem('sm_gmail_email') || 'me';
+      if ((s.directMailEngine === 'gmail' || !s.directMailEngine) && gmailToken) {
+        const utf8Subject = `=?utf-8?B?${btoa(unescape(encodeURIComponent(subject || 'SaleMail Outreach')))}?=`;
+        const rfc2822Message = [
+          `To: ${recipient}`,
+          `From: SaleMail Campaign <${senderEmail !== 'me' ? senderEmail : ''}>`,
+          `Subject: ${utf8Subject}`,
+          `MIME-Version: 1.0`,
+          `Content-Type: text/html; charset=utf-8`,
+          ``,
+          htmlBody
+        ].join('\r\n');
+
+        const base64UrlEmail = btoa(unescape(encodeURIComponent(rfc2822Message)))
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+          .replace(/=+$/, '');
+
+        const gmailRes = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${gmailToken}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ raw: base64UrlEmail })
+        });
+        const gmailData = await gmailRes.json();
+        if (gmailRes.ok) {
+          console.log(`[SaleMail Gmail API] Sent directly via user mailbox! Message ID:`, gmailData.id);
+          return;
+        } else {
+          console.warn(`[SaleMail Gmail API] Error response:`, gmailData);
+        }
+      }
+
+      // 2. Direct Web3Forms Shoot (No activation link required)
       if (s.directMailEngine === 'web3forms' && s.web3FormsKey) {
         const res = await fetch("https://api.web3forms.com/submit", {
           method: "POST",

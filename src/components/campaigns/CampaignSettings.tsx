@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Shield, Clock, Sliders, Mail, Check } from 'lucide-react';
 import { campaignEngine, type CampaignSettingsData } from './campaignEngine';
+import { useAuth } from '../../lib/AuthContext';
 
 export const CampaignSettings: React.FC = () => {
+  const { signInWithGoogle, user } = useAuth();
   const [settings, setSettings] = useState<CampaignSettingsData>(campaignEngine.getSettings());
   const [savedToast, setSavedToast] = useState(false);
 
@@ -48,11 +50,19 @@ export const CampaignSettings: React.FC = () => {
           <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
             <button
               type="button"
+              onClick={() => handleUpdate({ directMailEngine: 'gmail' })}
+              className={`camp-btn ${settings.directMailEngine === 'gmail' ? 'camp-btn-primary' : 'camp-btn-ghost'}`}
+              style={{ fontSize: '0.85rem', padding: '8px 16px', flex: 1.2 }}
+            >
+              🔗 Gmail API (Auto Sent Folder)
+            </button>
+            <button
+              type="button"
               onClick={() => handleUpdate({ directMailEngine: 'web3forms' })}
               className={`camp-btn ${settings.directMailEngine === 'web3forms' ? 'camp-btn-primary' : 'camp-btn-ghost'}`}
               style={{ fontSize: '0.85rem', padding: '8px 16px', flex: 1 }}
             >
-              🔑 Web3Forms API Key
+              🔑 Web3Forms API
             </button>
             <button
               type="button"
@@ -60,11 +70,44 @@ export const CampaignSettings: React.FC = () => {
               className={`camp-btn ${settings.directMailEngine === 'emailjs' ? 'camp-btn-primary' : 'camp-btn-ghost'}`}
               style={{ fontSize: '0.85rem', padding: '8px 16px', flex: 1 }}
             >
-              📧 EmailJS Connected SMTP
+              📧 EmailJS SMTP
             </button>
           </div>
 
-          {settings.directMailEngine === 'web3forms' ? (
+          {settings.directMailEngine === 'gmail' ? (
+            <div style={{ background: '#f1f5f9', padding: '14px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1e293b' }}>
+                    {settings.gmailAccessToken || localStorage.getItem('sm_gmail_token') ? '✅ Connected Mailbox Authorized' : '⚠️ No Gmail Mailbox Connected'}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                    {settings.gmailUserEmail || localStorage.getItem('sm_gmail_email') || user?.email || 'Click below to connect your Google account'}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await signInWithGoogle();
+                      const updatedToken = localStorage.getItem('sm_gmail_token') || '';
+                      const updatedEmail = localStorage.getItem('sm_gmail_email') || user?.email || '';
+                      handleUpdate({ directMailEngine: 'gmail', gmailAccessToken: updatedToken, gmailUserEmail: updatedEmail });
+                    } catch (e) {
+                      console.error("Gmail OAuth connection failed:", e);
+                    }
+                  }}
+                  className="camp-btn camp-btn-primary"
+                  style={{ fontSize: '0.82rem', padding: '6px 14px', background: '#4f46e5' }}
+                >
+                  🔗 1-Click Connect Gmail
+                </button>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.78rem', color: '#475569' }}>
+                💡 <strong>Why Gmail API?</strong> Emails are sent authenticated directly from your Google Workspace/Gmail account. They land straight in primary inboxes and copies are automatically saved in your Gmail <strong>Sent</strong> folder!
+              </p>
+            </div>
+          ) : settings.directMailEngine === 'web3forms' ? (
             <div>
               <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '6px' }}>
                 Web3Forms Access Key (<a href="https://web3forms.com" target="_blank" rel="noreferrer" style={{ color: '#4f46e5' }}>Get free key instantly</a>)

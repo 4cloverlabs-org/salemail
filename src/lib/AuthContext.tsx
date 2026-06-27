@@ -5,6 +5,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, requireAuth, requireDb, isFirebaseConfigured } from './firebase';
+import { campaignEngine } from '../components/campaigns/campaignEngine';
 
 interface AuthContextValue {
   user: User | null;
@@ -50,8 +51,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/gmail.send');
     provider.setCustomParameters({ prompt: 'select_account' });
     const cred = await signInWithPopup(requireAuth(), provider);
+    const credential = GoogleAuthProvider.credentialFromResult(cred);
+    if (credential?.accessToken) {
+      localStorage.setItem('sm_gmail_token', credential.accessToken);
+      localStorage.setItem('sm_gmail_email', cred.user.email || '');
+      const currentSettings = campaignEngine.getSettings();
+      campaignEngine.updateSettings({
+        ...currentSettings,
+        directMailEngine: 'gmail',
+        gmailAccessToken: credential.accessToken,
+        gmailUserEmail: cred.user.email || ''
+      });
+    }
     await setDoc(doc(requireDb(), 'users', cred.user.uid), {
       name: cred.user.displayName || 'Google User', 
       email: cred.user.email, 
