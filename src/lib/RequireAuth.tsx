@@ -10,7 +10,7 @@ export default function RequireAuth({ children }: { children: ReactNode }) {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
-        <div style={{ width: 34, height: 34, border: '3px solid #ececf0', borderTopColor: '#4f46e5', borderRadius: '50%', animation: 'crmSpin 0.7s linear infinite' }} />
+        <div style={{ width: 34, height: 34, border: '3px solid #ececf0', borderTopColor: '#0E61F3', borderRadius: '50%', animation: 'crmSpin 0.7s linear infinite' }} />
       </div>
     );
   }

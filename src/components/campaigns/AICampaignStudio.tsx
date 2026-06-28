@@ -46,13 +46,13 @@ export const AICampaignStudio: React.FC<AICampaignStudioProps> = ({ onApplySeque
     <div className="camp-ai-studio" style={{ background: '#fff', borderRadius: '12px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.02)', position: 'sticky', top: '24px' }}>
       <div className="camp-ai-banner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1rem', color: '#0f172a' }}>
-          <Sparkles size={18} style={{ color: '#4f46e5' }} /> AI CAMPAIGN STUDIO
+          <Sparkles size={18} style={{ color: '#0E61F3' }} /> AI CAMPAIGN STUDIO
         </div>
       </div>
 
       <div style={{ marginBottom: '20px' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '10px' }}>
-          <Globe size={15} style={{ color: '#6366f1' }} /> Client Website URL(s)
+          <Globe size={15} style={{ color: '#0A54DB' }} /> Client Website URL(s)
         </label>
         <input
           type="text"
@@ -66,7 +66,7 @@ export const AICampaignStudio: React.FC<AICampaignStudioProps> = ({ onApplySeque
 
       <div style={{ marginBottom: '24px' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '10px' }}>
-          <FileText size={15} style={{ color: '#6366f1' }} /> OR Client Description & Pitch
+          <FileText size={15} style={{ color: '#0A54DB' }} /> OR Client Description & Pitch
         </label>
         <textarea
           className="camp-textarea"
@@ -81,7 +81,7 @@ export const AICampaignStudio: React.FC<AICampaignStudioProps> = ({ onApplySeque
         onClick={handleGenerate}
         disabled={isScraping || isGenerating || (!urlInput.trim() && !descInput.trim())}
         className="camp-btn camp-btn-primary"
-        style={{ width: '100%', padding: '14px', fontSize: '0.95rem', fontWeight: 700, background: '#4f46e5', borderRadius: '8px' }}
+        style={{ width: '100%', padding: '14px', fontSize: '0.95rem', fontWeight: 700, background: '#0E61F3', borderRadius: '8px' }}
       >
         {isScraping ? (
           <>

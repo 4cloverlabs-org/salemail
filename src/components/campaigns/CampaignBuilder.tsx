@@ -147,7 +147,7 @@ export const CampaignBuilder: React.FC<CampaignBuilderProps> = ({ userEmail, cam
           <button
             onClick={handleStartPause}
             className="camp-btn camp-btn-primary"
-            style={activeCamp.status === 'Running' ? { background: '#4f46e5', color: '#fff', fontWeight: 600, padding: '8px 16px' } : { background: '#4f46e5', color: '#fff', fontWeight: 600, padding: '8px 16px' }}
+            style={activeCamp.status === 'Running' ? { background: '#0E61F3', color: '#fff', fontWeight: 600, padding: '8px 16px' } : { background: '#0E61F3', color: '#fff', fontWeight: 600, padding: '8px 16px' }}
           >
             {activeCamp.status === 'Running' ? (
               <>
@@ -203,7 +203,7 @@ export const CampaignBuilder: React.FC<CampaignBuilderProps> = ({ userEmail, cam
             <button
               onClick={handleAddFollowUp}
               className="camp-btn camp-btn-ghost"
-              style={{ padding: '10px 20px', background: '#fff', border: '1px dashed #c7d2fe', color: '#4f46e5', fontWeight: 600, borderRadius: '8px', boxShadow: 'none' }}
+              style={{ padding: '10px 20px', background: '#fff', border: '1px dashed #C9DBFF', color: '#0E61F3', fontWeight: 600, borderRadius: '8px', boxShadow: 'none' }}
             >
               <Plus size={16} /> Add Follow-Up Step
             </button>

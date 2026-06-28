@@ -85,7 +85,7 @@ export const CampaignModule: React.FC = () => {
           </button>
           <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.04em', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span>Outbound Campaigns</span>
-            <span style={{ fontSize: '0.72rem', background: '#eef0fe', color: '#4f46e5', padding: '3px 10px', borderRadius: '9999px', fontWeight: 600, letterSpacing: '0.02em' }}>
+            <span style={{ fontSize: '0.72rem', background: '#EAF2FF', color: '#0E61F3', padding: '3px 10px', borderRadius: '9999px', fontWeight: 600, letterSpacing: '0.02em' }}>
               AI STUDIO 3.1
             </span>
           </h2>

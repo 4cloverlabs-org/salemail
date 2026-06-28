@@ -35,7 +35,7 @@ export const CampaignList: React.FC<CampaignListProps> = ({ campaigns, onCreateN
         <button
           onClick={onCreateNew}
           className="camp-btn"
-          style={{ background: '#4f46e5', color: '#fff', padding: '10px 20px', borderRadius: '8px', fontWeight: 600, border: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+          style={{ background: '#0E61F3', color: '#fff', padding: '10px 20px', borderRadius: '8px', fontWeight: 600, border: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
           <Plus size={16} /> New Campaign
         </button>
@@ -55,8 +55,8 @@ export const CampaignList: React.FC<CampaignListProps> = ({ campaigns, onCreateN
               border: '1px solid',
               transition: 'all 0.2s',
               background: filter === opt ? '#eef2ff' : '#fff',
-              color: filter === opt ? '#4f46e5' : '#64748b',
-              borderColor: filter === opt ? '#c7d2fe' : '#e2e8f0',
+              color: filter === opt ? '#0E61F3' : '#64748b',
+              borderColor: filter === opt ? '#C9DBFF' : '#e2e8f0',
             }}
           >
             {opt}
@@ -99,7 +99,7 @@ export const CampaignList: React.FC<CampaignListProps> = ({ campaigns, onCreateN
                   </td>
                   <td style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: '#334155', fontWeight: 500 }}>
-                      <Target size={14} style={{ color: '#4f46e5' }} /> {camp.recipientEmail}
+                      <Target size={14} style={{ color: '#0E61F3' }} /> {camp.recipientEmail}
                     </div>
                   </td>
                   <td style={{ padding: '20px 24px' }}>

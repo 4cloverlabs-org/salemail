@@ -6,7 +6,7 @@ import {
   CheckCircle2, Menu, TrendingUp, CalendarRange, CalendarCheck,
   Clock, Workflow, Spline, Store, CreditCard, Shield, HelpCircle,
   Sparkles, Link2, Video, Zap, BookOpen, MessageCircle, Keyboard, Check, X,
-  Copy, Rocket, Calendar, Trash2, LogOut, Loader2
+  Copy, Rocket, Calendar, Trash2, LogOut, Loader2, Play, EyeOff, ExternalLink, Edit2, Code, Info, ArrowLeft
 } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useAuth } from '../lib/AuthContext';
@@ -22,12 +22,12 @@ type View =
 
 /* ---------------- mock data ---------------- */
 // Indigo palette — avatars use shades of the single accent
-const AV_COLORS = ['#4f46e5', '#6366f1', '#4338ca', '#818cf8', '#3730a3', '#5b54ea', '#7c75f2'];
+const AV_COLORS = ['#0E61F3', '#3B82F6', '#0849C2', '#60A5FA', '#1D4ED8', '#2563EB', '#93C5FD'];
 const avColor = (i: number) => AV_COLORS[i % AV_COLORS.length];
 // Light → dark indigo ramp for chart segments that need to be distinguished
-const RAMP = ['#dcd9fb', '#b3aef6', '#8b84f0', '#4f46e5', '#3730a3'];
-const ACCENT = '#4f46e5';
-const ACCENT_SOFT = '#eef0fe';
+const RAMP = ['#C9DBFF', '#9BBDFD', '#6A98F9', '#0E61F3', '#0849C2'];
+const ACCENT = '#0E61F3';
+const ACCENT_SOFT = '#EAF2FF';
 const initials = (n: string) => n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
 
@@ -66,9 +66,23 @@ const DEFAULT_BOOKINGS = [
   { name: 'Sienna Brooks', event: '30 Min Meeting', when: 'Jun 10 · 1:00 PM', status: 'cancelled' },
 ];
 
-const WEEK = [
-  { day: 'Monday', on: true }, { day: 'Tuesday', on: true }, { day: 'Wednesday', on: true },
-  { day: 'Thursday', on: true }, { day: 'Friday', on: true }, { day: 'Saturday', on: false }, { day: 'Sunday', on: false },
+const DEFAULT_WEEK = [
+  { day: 'Monday', on: true, start: '09:00', end: '17:00' },
+  { day: 'Tuesday', on: true, start: '09:00', end: '17:00' },
+  { day: 'Wednesday', on: true, start: '09:00', end: '17:00' },
+  { day: 'Thursday', on: true, start: '09:00', end: '17:00' },
+  { day: 'Friday', on: true, start: '09:00', end: '17:00' },
+  { day: 'Saturday', on: false, start: '09:00', end: '17:00' },
+  { day: 'Sunday', on: false, start: '09:00', end: '17:00' },
+];
+
+const TIMEZONES = [
+  'Pacific/Midway', 'America/Adak', 'America/Anchorage', 'America/Los_Angeles',
+  'America/Denver', 'America/Chicago', 'America/New_York', 'America/Halifax',
+  'America/St_Johns', 'America/Argentina/Buenos_Aires', 'America/Sao_Paulo',
+  'Atlantic/Azores', 'Europe/London', 'Europe/Berlin', 'Europe/Athens',
+  'Europe/Moscow', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Dhaka', 'Asia/Bangkok',
+  'Asia/Hong_Kong', 'Asia/Tokyo', 'Australia/Sydney', 'Pacific/Auckland'
 ];
 
 const WORKFLOWS = [
@@ -166,7 +180,6 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
     { id: 'eventTypes', label: 'Event Types', icon: CalendarRange },
     { id: 'bookings', label: 'Bookings', icon: CalendarCheck },
-    { id: 'availability', label: 'Availability', icon: Clock },
     { id: 'people', label: 'Leads', icon: Users },
   ]},
   { label: 'Automate', items: [
@@ -214,6 +227,16 @@ export default function CrmDashboard() {
   const [appCat, setAppCat] = useState('All');
   const [appsTab, setAppsTab] = useState<'store' | 'installed'>('store');
   const [peopleTab, setPeopleTab] = useState<'contacts' | 'teams'>('contacts');
+  const [etTab, setEtTab] = useState<'eventTypes' | 'availability'>('eventTypes');
+  const [etDropdown, setEtDropdown] = useState<string | null>(null);
+
+  // Availability State
+  const [availSchedule, setAvailSchedule] = useState(DEFAULT_WEEK);
+  const [availPrefs, setAvailPrefs] = useState({ tz: 'America/New_York', notice: '4 hours', buffer: '15 minutes' });
+  const saveAvailability = () => {
+    setToast('Availability saved!');
+    window.setTimeout(() => setToast(null), 2000);
+  };
   
   // Google Calendar Integration Mock State
   const [googleConnected, setGoogleConnected] = useState(localStorage.getItem('googleCalConnected') === 'true');
@@ -678,48 +701,252 @@ export default function CrmDashboard() {
               </div>
             )}
 
-            {/* ---------- EVENT TYPES ---------- */}
+            {/* ---------- EVENT TYPES & AVAILABILITY ---------- */}
             {view === 'eventTypes' && (
-              <div className="crm-fade crm-et-grid">
-                {eventTypes.map((e) => (
-                  <div className="crm-et-card" key={e.slug} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div className="crm-et-top">
-                      <div>
-                        <h4>{e.title}</h4>
-                        <span className="crm-chip" style={{ marginTop: 8, display: 'inline-block' }}>{e.dur}</span>
+              <div className="crm-fade">
+                <div className="crm-seg" style={{ width: 'fit-content', marginBottom: 22 }}>
+                  <button className={etTab === 'eventTypes' ? 'on' : ''} onClick={() => setEtTab('eventTypes')}>Event Types</button>
+                  <button className={etTab === 'availability' ? 'on' : ''} onClick={() => setEtTab('availability')}>Availability</button>
+                </div>
+
+                {etTab === 'eventTypes' ? (
+                  <div style={{
+                  background: '#fff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  {eventTypes.map((e, index) => (
+                    <div key={e.slug} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px 20px',
+                      borderBottom: index < eventTypes.length - 1 ? '1px solid #e2e8f0' : 'none',
+                    }}>
+                      {/* Left */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>{e.title}</span>
+                          <span style={{ fontSize: '0.85rem', color: '#64748b' }}>/{uid}/{e.slug}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ 
+                            display: 'flex', alignItems: 'center', gap: '4px',
+                            fontSize: '0.75rem', color: '#475569',
+                            background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px'
+                          }}>
+                            <Clock size={12} /> {e.dur}
+                          </span>
+                          {!e.active && (
+                            <span style={{
+                              display: 'flex', alignItems: 'center', gap: '4px',
+                              fontSize: '0.75rem', color: '#b45309',
+                              background: '#fef3c7', padding: '2px 6px', borderRadius: '4px',
+                              fontWeight: 600
+                            }}>
+                              <EyeOff size={12} /> Hidden
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <button 
-                        className={`crm-switch${e.active ? ' on' : ''}`} 
-                        aria-label="Active" 
-                        onClick={() => toggleEventType(e.id, !e.active)}
-                      />
+                      
+                      {/* Right */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <button 
+                          className={`crm-switch${e.active ? ' on' : ''}`} 
+                          aria-label="Active" 
+                          onClick={() => toggleEventType(e.id, !e.active)}
+                          style={{ transform: 'scale(0.85)', transformOrigin: 'center' }}
+                        />
+                        <div style={{ width: '1px', height: '24px', background: '#e2e8f0', margin: '0 4px' }} />
+                        <button 
+                          className="et-icon-btn"
+                          onClick={() => window.open(`/book/${uid}/${e.slug}`, '_blank')}
+                          title="Preview"
+                        >
+                          <ExternalLink size={16} />
+                        </button>
+                        <button 
+                          className="et-icon-btn"
+                          onClick={() => {
+                            navigator.clipboard?.writeText(`${window.location.origin}/book/${uid}/${e.slug}`);
+                            setToast('Link copied');
+                            window.setTimeout(() => setToast(null), 1800);
+                          }}
+                          title="Copy Link"
+                        >
+                          <Link2 size={16} />
+                        </button>
+                        
+                        {/* Dropdown Wrapper */}
+                        <div style={{ position: 'relative' }}>
+                          <button 
+                            className="et-icon-btn"
+                            onClick={() => setEtDropdown(etDropdown === e.id ? null : e.id)}
+                            title="More Options"
+                          >
+                            <MoreHorizontal size={16} />
+                          </button>
+
+                          {etDropdown === e.id && (
+                            <>
+                              {/* Invisible backdrop to close dropdown */}
+                              <div 
+                                style={{ position: 'fixed', inset: 0, zIndex: 40 }}
+                                onClick={() => setEtDropdown(null)}
+                              />
+                              <div style={{
+                                position: 'absolute', right: 0, top: '40px',
+                                background: '#fff', border: '1px solid #e2e8f0',
+                                borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                                minWidth: '160px', zIndex: 50, padding: '4px'
+                              }}>
+                                <button className="et-dd-btn" onClick={() => { setEtDropdown(null); setToast('Edit Event Type'); }}>
+                                  <Edit2 size={14} /> Edit
+                                </button>
+                                <button className="et-dd-btn" onClick={() => { setEtDropdown(null); setToast('Duplicate Event Type'); }}>
+                                  <Copy size={14} /> Duplicate
+                                </button>
+                                <button className="et-dd-btn" onClick={() => { 
+                                  setEtDropdown(null); 
+                                  const code = `<!-- SaleMail inline widget begin -->\n<div class="salemail-inline-widget" data-url="${window.location.origin}/book/${uid}/${e.slug}" style="min-width:320px;height:700px;"></div>\n<script type="text/javascript" src="${window.location.origin}/widget.js" async></script>\n<!-- SaleMail inline widget end -->`;
+                                  navigator.clipboard?.writeText(code).catch(() => {});
+                                  setToast('Embed code copied'); window.setTimeout(() => setToast(null), 1800);
+                                }}>
+                                  <Code size={14} /> Embed
+                                </button>
+                                <button className="et-dd-btn" onClick={() => { setEtDropdown(null); setToast('Troubleshooting'); }}>
+                                  <CalendarCheck size={14} /> Troubleshoot
+                                </button>
+                                <div style={{ height: '1px', background: '#e2e8f0', margin: '4px 0' }} />
+                                <button className="et-dd-btn delete" onClick={() => { setEtDropdown(null); removeEventType(e.id, e.title); }}>
+                                  <Trash2 size={14} /> Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <p style={{ fontSize: '0.82rem', color: '#6a6a78', marginTop: 10 }}>{e.desc}</p>
-                    <div className="crm-et-link">salemail.io/book/{uid}/{e.slug}</div>
-                    
-                    <div style={{ marginTop: 16, background: '#fafafb', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
-                      <div style={{ padding: '8px 12px', fontSize: '0.74rem', fontWeight: 500, color: 'var(--ink)', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        Embed Widget
-                        <button className="crm-btn crm-btn-ghost" style={{ padding: '4px 8px', fontSize: '0.7rem', height: 'auto', minHeight: 0 }} onClick={() => {
-                          const code = `<!-- SaleMail inline widget begin -->\n<div class="salemail-inline-widget" data-url="${window.location.origin}/book/${uid}/${e.slug}" style="min-width:320px;height:700px;"></div>\n<script type="text/javascript" src="${window.location.origin}/widget.js" async></script>\n<!-- SaleMail inline widget end -->`;
-                          navigator.clipboard?.writeText(code).catch(() => {});
-                          setToast('Embed code copied'); window.setTimeout(() => setToast(null), 1800);
-                        }}>
-                           <Copy size={12} style={{ marginRight: 4 }} /> Copy
+                  ))}
+                </div>
+                ) : (
+                  <div className="cal-layout">
+                    {/* Header */}
+                    <div className="cal-header">
+                      <div className="cal-header-left">
+                        <button className="cal-back-btn" onClick={() => setEtTab('eventTypes')}>
+                          <ArrowLeft size={18} />
+                        </button>
+                        <div className="cal-title-group">
+                          <h2>Working hours <Edit2 size={16} /></h2>
+                          <p>Mon - Fri, 9:00 AM - 5:00 PM</p>
+                        </div>
+                      </div>
+                      <div className="cal-header-right">
+                        <label className="cal-default-toggle">
+                          Set as default
+                          <button className="cal-switch on" aria-label="Default toggle" />
+                        </label>
+                        <button className="cal-btn-icon" aria-label="Delete schedule">
+                          <Trash2 size={16} />
+                        </button>
+                        <button className="cal-btn-save" onClick={saveAvailability}>
+                          Save
                         </button>
                       </div>
-                      <pre className="crm-code" style={{ margin: 0, padding: 12, border: 'none', borderRadius: 0, fontSize: '0.7rem', overflowX: 'auto', whiteSpace: 'pre-wrap', color: 'var(--text)' }}>
-                        {`<!-- SaleMail inline widget begin -->\n<div class="salemail-inline-widget" data-url="${window.location.origin}/book/${uid}/${e.slug}" style="min-width:320px;height:700px;"></div>\n<script type="text/javascript" src="${window.location.origin}/widget.js" async></script>\n<!-- SaleMail inline widget end -->`}
-                      </pre>
                     </div>
 
-                    <div className="crm-et-foot" style={{ marginTop: 'auto', paddingTop: 16 }}>
-                      <button className="crm-btn crm-btn-ghost" style={{ flex: 1 }} onClick={() => { navigator.clipboard?.writeText(`${window.location.origin}/book/${uid}/${e.slug}`); setToast('Link copied'); window.setTimeout(() => setToast(null), 1800); }}><Link2 size={14} /> Copy link</button>
-                      <button className="crm-btn crm-btn-ghost" style={{ flex: 1 }} onClick={() => window.open(`/book/${uid}/${e.slug}`, '_blank')}>Preview</button>
-                      <button className="crm-btn crm-btn-ghost" style={{ padding: '0 8px', color: 'var(--rose)' }} onClick={() => removeEventType(e.id, e.title)} title="Delete Event Type"><Trash2 size={14} /></button>
+                    {/* Content Grid */}
+                    <div className="cal-grid">
+                      {/* Left Column */}
+                      <div>
+                        {/* Weekly Schedule Card */}
+                        <div className="cal-card">
+                          {availSchedule.map((d, index) => (
+                            <div key={d.day} className={`cal-row${d.on ? '' : ' off'}`}>
+                              <div className="cal-row-left">
+                                <button 
+                                  className={`cal-switch${d.on ? ' on' : ''}`} 
+                                  aria-label={d.day}
+                                  onClick={() => {
+                                    const newSched = [...availSchedule];
+                                    newSched[index].on = !newSched[index].on;
+                                    setAvailSchedule(newSched);
+                                  }}
+                                />
+                                <span className="cal-row-day">{d.day}</span>
+                              </div>
+                              
+                              <div className="cal-row-times">
+                                {d.on && (
+                                  <>
+                                    <input 
+                                      type="time" 
+                                      className="cal-time-input"
+                                      value={d.start} 
+                                      onChange={(e) => {
+                                        const newSched = [...availSchedule];
+                                        newSched[index].start = e.target.value;
+                                        setAvailSchedule(newSched);
+                                      }}
+                                    />
+                                    <span style={{ color: '#94A3B8', fontWeight: 500 }}>-</span>
+                                    <input 
+                                      type="time" 
+                                      className="cal-time-input"
+                                      value={d.end} 
+                                      onChange={(e) => {
+                                        const newSched = [...availSchedule];
+                                        newSched[index].end = e.target.value;
+                                        setAvailSchedule(newSched);
+                                      }}
+                                    />
+                                  </>
+                                )}
+                              </div>
+                              
+                              <div className="cal-row-actions">
+                                {d.on && <Plus size={16} />}
+                                <Copy size={16} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Date Overrides Card */}
+                        <div className="cal-card cal-overrides-card">
+                          <h3>Date overrides <Info size={14} style={{ color: '#94A3B8' }} /></h3>
+                          <p>Add dates when your availability changes from your daily hours.</p>
+                          <button className="cal-btn-outline">
+                            <Plus size={14} /> Add an override
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Right Column */}
+                      <div>
+                        <div className="cal-side-section">
+                          <label className="cal-side-label">Timezone</label>
+                          <select 
+                            className="cal-select"
+                            value={availPrefs.tz}
+                            onChange={(e) => setAvailPrefs({ ...availPrefs, tz: e.target.value })}
+                          >
+                            {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz}</option>)}
+                          </select>
+                        </div>
+                        
+                        <div className="cal-trouble-card">
+                          <h4>Something doesn't look right?</h4>
+                          <button className="cal-btn-trouble">Launch troubleshooter</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             )}
 
@@ -750,38 +977,6 @@ export default function CrmDashboard() {
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
-
-            {/* ---------- AVAILABILITY ---------- */}
-            {view === 'availability' && (
-              <div className="crm-fade crm-grid-2b">
-                <div className="crm-card">
-                  <div className="crm-card-head"><h3>Working hours</h3><span className="sub">Mon–Sun</span></div>
-                  {WEEK.map((d) => (
-                    <div className={`crm-avail-row${d.on ? '' : ' off'}`} key={d.day}>
-                      <button className={`crm-switch${d.on ? ' on' : ''}`} aria-label={d.day} />
-                      <span className="day">{d.day}</span>
-                      <div className="times">
-                        {d.on ? (<><span className="crm-time">09:00</span><span style={{ color: '#9b9bab' }}>–</span><span className="crm-time">17:00</span></>)
-                          : <span style={{ fontSize: '0.8rem', color: '#9b9bab' }}>Unavailable</span>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="crm-card" style={{ alignSelf: 'start' }}>
-                  <div className="crm-card-head"><h3>Preferences</h3></div>
-                  <div className="crm-field"><label>Timezone</label>
-                    <select defaultValue="America/New_York"><option>America/New_York</option><option>Europe/London</option><option>Asia/Kolkata</option></select>
-                  </div>
-                  <div className="crm-field"><label>Minimum notice</label>
-                    <select defaultValue="4 hours"><option>1 hour</option><option>4 hours</option><option>24 hours</option></select>
-                  </div>
-                  <div className="crm-field"><label>Buffer between meetings</label>
-                    <select defaultValue="15 minutes"><option>None</option><option>10 minutes</option><option>15 minutes</option></select>
-                  </div>
-                  <button className="crm-btn crm-btn-primary" style={{ width: '100%' }}>Save availability</button>
-                </div>
               </div>
             )}
 
@@ -898,7 +1093,7 @@ export default function CrmDashboard() {
                           const h = (d.v / max) * 156;
                           return (
                             <g key={d.m}>
-                              <rect x={8 + i * bw + bw * 0.2} y={176 - h} width={bw * 0.6} height={h} rx="4" fill={i === REVENUE.length - 1 ? '#4f46e5' : '#dcd9fb'} />
+                              <rect x={8 + i * bw + bw * 0.2} y={176 - h} width={bw * 0.6} height={h} rx="4" fill={i === REVENUE.length - 1 ? '#0E61F3' : '#dcd9fb'} />
                               <text x={8 + i * bw + bw / 2} y="194" fontSize="9" fill="#9b9bab" textAnchor="middle">{d.m}</text>
                             </g>
                           );
@@ -1036,7 +1231,7 @@ export default function CrmDashboard() {
                 <div className="crm-card">
                   <div className="crm-card-head"><h3>Profile</h3></div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-                    <span className="crm-av" style={{ width: 54, height: 54, fontSize: '1.1rem', background: '#4f46e5' }}>{userInitials}</span>
+                    <span className="crm-av" style={{ width: 54, height: 54, fontSize: '1.1rem', background: '#0E61F3' }}>{userInitials}</span>
                     <div><div style={{ fontWeight: 500 }}>{displayName}</div><div style={{ fontSize: '0.78rem', color: '#9b9bab' }}>{user?.email}</div></div>
                   </div>
                   <div className="crm-field"><label>Full name</label><input defaultValue={displayName} /></div>

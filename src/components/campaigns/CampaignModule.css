@@ -4,16 +4,16 @@
    ========================================================================== */
 
 :root {
-  --camp-accent: #4f46e5;
-  --camp-accent-hover: #4338ca;
-  --camp-accent-soft: #eef0fe;
-  --camp-accent-light: #818cf8;
-  --camp-bg: #ffffff;
-  --camp-subtle-bg: #f8fafc;
-  --camp-border: #e2e8f0;
-  --camp-border-hover: #cbd5e1;
-  --camp-text: #0f172a;
-  --camp-text-muted: #64748b;
+  --camp-accent: #0E61F3;
+  --camp-accent-hover: #0A54DB;
+  --camp-accent-soft: #EAF2FF;
+  --camp-accent-light: #C9DBFF;
+  --camp-bg: #FFFFFF;
+  --camp-subtle-bg: #FAFAFB;
+  --camp-border: #E5E7EB;
+  --camp-border-hover: #CBD5E1;
+  --camp-text: #111827;
+  --camp-text-muted: #6B7280;
   --camp-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --camp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
   --camp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
@@ -73,7 +73,7 @@
 
 .camp-tab-btn.active {
   background: #ffffff;
-  color: #4f46e5;
+  color: #0E61F3;
   border: 1px solid #e0e7ff;
   box-shadow: 0 1px 2px rgba(0,0,0,0.02);
 }
@@ -137,14 +137,14 @@
 }
 
 .camp-btn-primary {
-  background: #4f46e5;
+  background: #0E61F3;
   color: #ffffff;
   border: 1px solid transparent;
   box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
 }
 
 .camp-btn-primary:hover {
-  background: #4338ca;
+  background: #0849C2;
   box-shadow: 0 6px 12px -2px rgba(79, 70, 229, 0.2);
   transform: translateY(-1px);
 }
@@ -183,14 +183,14 @@
   width: 24px;
   height: 24px;
   background: #fff;
-  border: 2px solid #4f46e5;
+  border: 2px solid #0E61F3;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #4f46e5;
+  color: #0E61F3;
   z-index: 1;
 }
 
@@ -372,7 +372,7 @@
   align-items: center;
   gap: 8px;
   background: #1e1b4b;
-  color: #c7d2fe;
+  color: #C9DBFF;
   font-family: monospace;
   font-size: 0.85rem;
   font-weight: 600;
@@ -392,7 +392,7 @@
 
 .camp-ai-banner {
   background: #f8fafc;
-  color: #4f46e5;
+  color: #0E61F3;
   padding: 16px 20px;
   border-radius: var(--camp-radius-md);
   display: flex;
@@ -516,7 +516,7 @@
   background: var(--camp-accent-soft);
   color: #1e1b4b;
   align-self: flex-end;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #C9DBFF;
 }
 
 /* Analytics Cards */

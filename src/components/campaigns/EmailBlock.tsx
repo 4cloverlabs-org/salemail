@@ -76,11 +76,11 @@ export const EmailBlock: React.FC<EmailBlockProps> = ({
       : 'your organization';
 
     return html
-      .replace(/{{RecipientID}}|{{RecipientEmail}}|{{FirstName}}|{{LastName}}/g, `<strong style="color: #4f46e5;">${toName}</strong>`)
-      .replace(/{{SenderID}}|{{SenderEmail}}|{{MyEmail}}/g, `<strong style="color: #4f46e5;">${fromName}</strong>`)
-      .replace(/{{Company}}/g, `<strong style="color: #4f46e5;">${companyName}</strong>`)
-      .replace(/{{Industry}}/g, '<strong style="color: #4f46e5;">B2B Operations</strong>')
-      .replace(/{{Location}}/g, '<strong style="color: #4f46e5;">Global</strong>');
+      .replace(/{{RecipientID}}|{{RecipientEmail}}|{{FirstName}}|{{LastName}}/g, `<strong style="color: #0E61F3;">${toName}</strong>`)
+      .replace(/{{SenderID}}|{{SenderEmail}}|{{MyEmail}}/g, `<strong style="color: #0E61F3;">${fromName}</strong>`)
+      .replace(/{{Company}}/g, `<strong style="color: #0E61F3;">${companyName}</strong>`)
+      .replace(/{{Industry}}/g, '<strong style="color: #0E61F3;">B2B Operations</strong>')
+      .replace(/{{Location}}/g, '<strong style="color: #0E61F3;">Global</strong>');
   };
 
   const meta = statusMeta[step.status] || statusMeta.Pending;
@@ -98,7 +98,7 @@ export const EmailBlock: React.FC<EmailBlockProps> = ({
     >
       <div className="camp-block-head" style={{ padding: '16px 20px', background: '#fff', borderBottom: '1px solid rgba(0,0,0,0.04)', display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', background: stepIndex === 0 ? '#4f46e5' : '#f8fafc', color: stepIndex === 0 ? '#fff' : '#4f46e5', borderRadius: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', background: stepIndex === 0 ? '#0E61F3' : '#f8fafc', color: stepIndex === 0 ? '#fff' : '#0E61F3', borderRadius: '8px' }}>
             {stepIndex === 0 ? <Mail size={16} /> : <Send size={16} />}
           </div>
           <div>
@@ -211,7 +211,7 @@ export const EmailBlock: React.FC<EmailBlockProps> = ({
               type="button"
               className="camp-rte-btn"
               onClick={() => setIsPreview(!isPreview)}
-              style={isPreview ? { background: '#4f46e5', color: '#fff', borderColor: '#4f46e5' } : {}}
+              style={isPreview ? { background: '#0E61F3', color: '#fff', borderColor: '#0E61F3' } : {}}
             >
               <Eye size={13} style={{ display: 'inline', marginRight: '4px' }} />
               {isPreview ? 'Edit Mode' : 'Preview Live'}

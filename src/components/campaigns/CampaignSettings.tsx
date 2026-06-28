@@ -34,12 +34,12 @@ export const CampaignSettings: React.FC = () => {
 
       <div className="camp-flow-col" style={{ gap: '20px' }}>
         {/* Direct Gmail API Engine */}
-        <div className="camp-block-card" style={{ border: '2px solid #818cf8', background: '#f8fafc' }}>
+        <div className="camp-block-card" style={{ border: '2px solid #60A5FA', background: '#f8fafc' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', color: '#4f46e5' }}>
+            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', color: '#0E61F3' }}>
               ⚡ Direct Gmail API Engine (Live Connected Mailbox)
             </h4>
-            <span style={{ fontSize: '0.75rem', background: '#e0e7ff', color: '#4f46e5', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+            <span style={{ fontSize: '0.75rem', background: '#e0e7ff', color: '#0E61F3', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
               Auto Sent-Folder Sync
             </span>
           </div>
@@ -70,7 +70,7 @@ export const CampaignSettings: React.FC = () => {
                   }
                 }}
                 className="camp-btn camp-btn-primary"
-                style={{ fontSize: '0.82rem', padding: '8px 16px', background: '#4f46e5' }}
+                style={{ fontSize: '0.82rem', padding: '8px 16px', background: '#0E61F3' }}
               >
                 🔗 1-Click Connect Gmail
               </button>
@@ -84,7 +84,7 @@ export const CampaignSettings: React.FC = () => {
         {/* Sending Limits & Cadence */}
         <div className="camp-block-card">
           <h4 style={{ margin: '0 0 16px', fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Sliders size={18} style={{ color: '#4f46e5' }} /> Sending Cadence & Limits
+            <Sliders size={18} style={{ color: '#0E61F3' }} /> Sending Cadence & Limits
           </h4>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -113,7 +113,7 @@ export const CampaignSettings: React.FC = () => {
                 type="checkbox"
                 checked={settings.weekendSending}
                 onChange={(e) => handleUpdate({ weekendSending: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
+                style={{ width: '18px', height: '18px', accentColor: '#0E61F3', cursor: 'pointer' }}
               />
             </div>
           </div>
@@ -182,7 +182,7 @@ export const CampaignSettings: React.FC = () => {
                 type="checkbox"
                 checked={settings.stopOnReply}
                 onChange={(e) => handleUpdate({ stopOnReply: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
+                style={{ width: '18px', height: '18px', accentColor: '#0E61F3', cursor: 'pointer' }}
               />
             </div>
 
@@ -195,7 +195,7 @@ export const CampaignSettings: React.FC = () => {
                 type="checkbox"
                 checked={settings.pixelTracking}
                 onChange={(e) => handleUpdate({ pixelTracking: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
+                style={{ width: '18px', height: '18px', accentColor: '#0E61F3', cursor: 'pointer' }}
               />
             </div>
 
@@ -208,7 +208,7 @@ export const CampaignSettings: React.FC = () => {
                 type="checkbox"
                 checked={settings.linkTracking}
                 onChange={(e) => handleUpdate({ linkTracking: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
+                style={{ width: '18px', height: '18px', accentColor: '#0E61F3', cursor: 'pointer' }}
               />
             </div>
 
@@ -221,7 +221,7 @@ export const CampaignSettings: React.FC = () => {
                 type="checkbox"
                 checked={settings.autoUnsubscribe}
                 onChange={(e) => handleUpdate({ autoUnsubscribe: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
+                style={{ width: '18px', height: '18px', accentColor: '#0E61F3', cursor: 'pointer' }}
               />
             </div>
           </div>

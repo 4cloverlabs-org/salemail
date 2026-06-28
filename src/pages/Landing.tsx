@@ -175,15 +175,15 @@ export default function Landing() {
 
             {/* Bottom Graphic Showcase */}
             <div style={{ perspective: '2000px', padding: '10px 0 120px', display: 'flex', justifyContent: 'center' }}>
-              <motion.div 
+              <motion.div
                 className="hero-graphic-container"
-                initial={{ opacity: 0, y: 80, x: 60, rotateX: 30, rotateY: 30, rotateZ: -15 }}
-                animate={{ opacity: 1, y: 0, x: 60, rotateX: 15, rotateY: 25, rotateZ: -5 }}
+                initial={{ opacity: 0, y: 80, x: 0, rotateX: 0, rotateY: 0, rotateZ: -12 }}
+                animate={{ opacity: 1, y: 0, x: 0, rotateX: 0, rotateY: 0, rotateZ: -8 }}
                 transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
                 style={{
                   marginTop: '10px',
                   width: '100%',
-                  maxWidth: '1050px',
+                  maxWidth: '1000px',
                   overflow: 'visible',
                   display: 'block',
                   position: 'relative'
