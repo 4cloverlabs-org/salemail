@@ -295,7 +295,7 @@ export default function CrmDashboard() {
     localStorage.removeItem('sm_gmail_email');
     setGoogleConnected(false);
     if (user?.id) {
-      await supabase.from('users').update({ google_tokens: null }).eq('id', user.id).catch(() => {});
+      try { await supabase.from('users').update({ google_tokens: null }).eq('id', user.id); } catch(e) {}
     }
     setToast('Google disconnected.');
     setTimeout(() => setToast(null), 2000);
